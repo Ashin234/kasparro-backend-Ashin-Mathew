@@ -1,0 +1,15 @@
+# Node
+node_modules/
+npm-debug.log
+
+# Environment variables
+.env
+
+# Docker
+*.log
+
+# OS
+.DS_Store
+
+# Coverage
+coverage/

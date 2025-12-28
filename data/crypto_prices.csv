@@ -1,0 +1,101 @@
+coin_id,name,symbol,price_usd,last_updated
+bitcoin,Bitcoin,btc,87645,2025-12-28T05:56:13.703Z
+ethereum,Ethereum,eth,2936.87,2025-12-28T05:56:13.355Z
+tether,Tether,usdt,0.999444,2025-12-28T05:56:03.663Z
+binancecoin,BNB,bnb,843.03,2025-12-28T05:56:13.141Z
+ripple,XRP,xrp,1.87,2025-12-28T05:56:03.538Z
+usd-coin,USDC,usdc,1,2025-12-28T05:56:03.663Z
+solana,Solana,sol,123.8,2025-12-28T05:56:03.480Z
+tron,TRON,trx,0.28359,2025-12-28T05:56:03.372Z
+staked-ether,Lido Staked Ether,steth,2936.09,2025-12-28T05:56:03.033Z
+dogecoin,Dogecoin,doge,0.123858,2025-12-28T05:56:03.127Z
+figure-heloc,Figure Heloc,figr_heloc,1.02,2025-12-28T03:16:53.502Z
+cardano,Cardano,ada,0.371152,2025-12-28T05:56:03.565Z
+bitcoin-cash,Bitcoin Cash,bch,614.77,2025-12-28T05:56:03.381Z
+whitebit,WhiteBIT Coin,wbt,56.21,2025-12-28T05:56:03.438Z
+wrapped-steth,Wrapped stETH,wsteth,3590.81,2025-12-28T05:56:03.086Z
+wrapped-bitcoin,Wrapped Bitcoin,wbtc,87402,2025-12-28T05:56:03.432Z
+wrapped-beacon-eth,Wrapped Beacon ETH,wbeth,3193.07,2025-12-28T05:56:03.075Z
+usds,USDS,usds,0.999649,2025-12-28T05:56:09.269Z
+wrapped-eeth,Wrapped eETH,weeth,3184.75,2025-12-28T05:56:14.219Z
+binance-bridged-usdt-bnb-smart-chain,Binance Bridged USDT (BNB Smart Chain),bsc-usd,0.999332,2025-12-28T05:56:03.807Z
+chainlink,Chainlink,link,12.44,2025-12-28T05:56:03.576Z
+zcash,Zcash,zec,515.1,2025-12-28T05:56:03.189Z
+monero,Monero,xmr,454.33,2025-12-28T05:56:03.536Z
+leo-token,LEO Token,leo,8.37,2025-12-28T05:56:03.112Z
+weth,WETH,weth,2936.24,2025-12-28T05:56:04.317Z
+stellar,Stellar,xlm,0.222759,2025-12-28T05:56:03.683Z
+coinbase-wrapped-btc,Coinbase Wrapped BTC,cbbtc,87607,2025-12-28T05:56:05.009Z
+ethena-usde,Ethena USDe,usde,0.998815,2025-12-28T05:56:03.925Z
+hyperliquid,Hyperliquid,hype,26.01,2025-12-28T05:56:03.903Z
+litecoin,Litecoin,ltc,79.13,2025-12-28T05:56:03.642Z
+avalanche-2,Avalanche,avax,12.8,2025-12-28T05:56:03.456Z
+sui,Sui,sui,1.45,2025-12-28T05:56:04.272Z
+hedera-hashgraph,Hedera,hbar,0.115966,2025-12-28T05:56:04.018Z
+uniswap,Uniswap,uni,6.19,2025-12-28T05:56:03.713Z
+susds,sUSDS,susds,1.081,2025-12-28T05:56:03.953Z
+shiba-inu,Shiba Inu,shib,0.00000734,2025-12-28T05:56:03.494Z
+canton-network,Canton,cc,0.117022,2025-12-28T05:56:03.223Z
+dai,Dai,dai,0.999499,2025-12-28T05:56:03.678Z
+usdt0,USDT0,usdt0,0.999271,2025-12-28T05:56:03.958Z
+the-open-network,Toncoin,ton,1.61,2025-12-28T05:56:04.333Z
+world-liberty-financial,World Liberty Financial,wlfi,0.143306,2025-12-28T05:56:05.501Z
+paypal-usd,PayPal USD,pyusd,0.999623,2025-12-28T05:56:03.768Z
+crypto-com-chain,Cronos,cro,0.093658,2025-12-28T05:56:03.335Z
+ethena-staked-usde,Ethena Staked USDe,susde,1.21,2025-12-28T05:56:10.616Z
+mantle,Mantle,mnt,1.047,2025-12-28T05:56:03.532Z
+usd1-wlfi,USD1,usd1,1,2025-12-28T05:56:03.830Z
+polkadot,Polkadot,dot,1.89,2025-12-28T05:56:03.638Z
+rain,Rain,rain,0.00810372,2025-12-28T05:56:03.492Z
+memecore,MemeCore,m,1.47,2025-12-28T05:56:03.560Z
+bitget-token,Bitget Token,bgb,3.46,2025-12-28T05:56:03.584Z
+tether-gold,Tether Gold,xaut,4551.57,2025-12-28T05:56:03.869Z
+aave,Aave,aave,154.69,2025-12-28T05:56:03.670Z
+okb,OKB,okb,107.96,2025-12-28T05:56:03.475Z
+falcon-finance,Falcon USD,usdf,0.998241,2025-12-28T05:56:08.079Z
+bittensor,Bittensor,tao,224.53,2025-12-28T05:56:03.653Z
+near,NEAR Protocol,near,1.61,2025-12-28T05:56:03.923Z
+ethereum-classic,Ethereum Classic,etc,12.19,2025-12-28T05:56:03.694Z
+binance-peg-weth,Binance-Peg WETH,weth,2936.66,2025-12-28T05:56:03.905Z
+jito-staked-sol,Jito Staked SOL,jitosol,154.8,2025-12-28T05:56:03.602Z
+pepe,Pepe,pepe,0.00000416,2025-12-28T05:56:03.925Z
+blackrock-usd-institutional-digital-liquidity-fund,BlackRock USD Institutional Digital Liquidity Fund,buidl,1,2025-12-28T05:55:05.181Z
+pi-network,Pi Network,pi,0.205123,2025-12-28T05:56:04.020Z
+aster-2,Aster,aster,0.711735,2025-12-28T05:56:06.220Z
+internet-computer,Internet Computer,icp,3.08,2025-12-28T05:56:09.746Z
+ethena,Ethena,ena,0.213873,2025-12-28T05:56:03.661Z
+pax-gold,PAX Gold,paxg,4560.76,2025-12-28T05:56:03.686Z
+hash-2,Provenance Blockchain,hash,0.03046196,2025-12-28T05:56:08.904Z
+global-dollar,Global Dollar,usdg,0.999695,2025-12-28T05:56:03.855Z
+htx-dao,HTX DAO,htx,0.00000166,2025-12-28T05:56:11.918Z
+wrapped-solana,Wrapped SOL,sol,123.82,2025-12-28T05:56:04.300Z
+hashnote-usyc,Circle USYC,usyc,1.11,2025-12-23T18:34:27.316Z
+jupiter-perpetuals-liquidity-provider-token,Jupiter Perpetuals Liquidity Provider Token,jlp,4.5,2025-12-28T05:56:03.721Z
+midnight-3,Midnight,night,0.088197,2025-12-28T05:56:03.723Z
+syrupusdc,syrupUSDC,syrupusdc,1.14,2025-12-28T05:56:03.652Z
+sky,Sky,sky,0.06341,2025-12-28T05:56:03.818Z
+kucoin-shares,KuCoin,kcs,10.84,2025-12-28T05:56:03.800Z
+ripple-usd,Ripple USD,rlusd,0.999689,2025-12-28T05:56:09.675Z
+worldcoin-wld,Worldcoin,wld,0.508621,2025-12-28T05:56:03.919Z
+bfusd,BFUSD,bfusd,0.999295,2025-12-28T05:56:05.077Z
+aptos,Aptos,apt,1.75,2025-12-28T05:56:04.087Z
+binance-bridged-usdc-bnb-smart-chain,Binance Bridged USDC (BNB Smart Chain),usdc,0.999557,2025-12-28T05:56:04.077Z
+binance-staked-sol,Binance Staked SOL,bnsol,135.12,2025-12-28T05:56:03.840Z
+ondo-finance,Ondo,ondo,0.387785,2025-12-28T05:56:03.897Z
+rocket-pool-eth,Rocket Pool ETH,reth,3384.41,2025-12-28T05:56:03.728Z
+gatechain-token,Gate,gt,10.36,2025-12-28T05:56:03.793Z
+kaspa,Kaspa,kas,0.04491717,2025-12-28T05:56:08.487Z
+wbnb,Wrapped BNB,wbnb,843.04,2025-12-28T05:56:04.404Z
+polygon-ecosystem-token,POL (ex-MATIC),pol,0.10767,2025-12-28T05:56:03.989Z
+arbitrum,Arbitrum,arb,0.197448,2025-12-28T05:56:04.166Z
+pump-fun,Pump.fun,pump,0.00185637,2025-12-28T05:56:04.077Z
+kelp-dao-restaked-eth,Kelp DAO Restaked ETH,rseth,3115.81,2025-12-28T05:56:03.834Z
+quant-network,Quant,qnt,74.52,2025-12-28T05:56:04.263Z
+algorand,Algorand,algo,0.120238,2025-12-28T05:56:03.962Z
+janus-henderson-anemoy-aaa-clo-fund,Janus Henderson Anemoy AAA CLO Fund,jaaa,1.019,2025-12-28T05:55:06.795Z
+cosmos,Cosmos Hub,atom,2.09,2025-12-28T05:56:04.393Z
+official-trump,Official Trump,trump,4.96,2025-12-28T05:56:03.952Z
+vechain,VeChain,vet,0.01136241,2025-12-28T05:56:04.109Z
+ignition-fbtc,Function FBTC,fbtc,87962,2025-12-28T05:56:04.049Z
+filecoin,Filecoin,fil,1.32,2025-12-28T05:56:03.946Z
+lombard-staked-btc,Lombard Staked BTC,lbtc,87830,2025-12-28T05:56:03.976Z
