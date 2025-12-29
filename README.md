@@ -29,34 +29,25 @@ Checks database connectivity and ETL checkpoint status.
 ## Dockerization
 Prerequisites
 
-Docker
-
-Docker Compose
+- Docker
 
 Environment Setup
 
 Create a local environment file from the example:
 
-cp .env.example .env 
+- cp .env.example .env 
 
-To start in Linux / macOS use -- make up
+- To start in Linux / macOS use -- make up
+- To start in Windows (without make) -- docker-compose up --build
 
-To start in Windows (without make) -- docker-compose up --build
+This : 
 
-This 
-
-Start PostgreSQL
-
-Initialize database schema
-
-Run ETL pipelines automatically
-
-Start the API server
+- Start PostgreSQL
+- Initialize database schema
+- Run ETL pipelines automatically
+- Start the API server
 
 To stop in Linux / macOS -- make down
-
 To stop in Windows -- docker-compose down
-
 To run Tests in Linux / macOS -- make test
-
 To run Tests in Windows -- docker-compose run api npm test
