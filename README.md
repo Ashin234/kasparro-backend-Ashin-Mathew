@@ -37,7 +37,7 @@ Environment Setup
 
 Create a local environment file from the example:
 
-cp .env.example .env
+cp .env.example .env 
 
 To start in Linux / macOS use -- make up
 
