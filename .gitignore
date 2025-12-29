@@ -13,5 +13,8 @@ postgres_data
 # OS
 .DS_Store
 
+#textfile
+*.txt
+
 # Coverage
 coverage/

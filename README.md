@@ -1,5 +1,5 @@
 
-## Backend & ETL System
+## BACKEND & ETL SYSTEM
 
 ## Overview
 Production-style Backend & ETL system that ingests crypto data from
@@ -52,3 +52,17 @@ starting system:
 - Initialize database schema
 - Run ETL pipelines automatically
 - Start the API server
+
+## Testing
+
+This project includes a minimal but production-grade test suite.
+
+What is tested:
+
+- ETL transformation logic
+- API health endpoint
+- Failure scenarios
+- Schema validation
+
+Command to Run tests
+- npm test
