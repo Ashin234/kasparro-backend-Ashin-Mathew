@@ -8,6 +8,8 @@ npm-debug.log
 # Docker
 *.log
 
+postgres_data
+
 # OS
 .DS_Store
 

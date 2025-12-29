@@ -1,4 +1,4 @@
-const db = require("../../core/db");
+const { pool } = require("../../core/db");
 
 exports.getData = async (req, res) => {
   const start = Date.now();
@@ -20,7 +20,7 @@ exports.getData = async (req, res) => {
   query += ` ORDER BY last_updated DESC LIMIT $${paramIndex} OFFSET $${paramIndex + 1}`;
   params.push(limit, offset);
 
-  const result = await db.query(query, params);
+  const result = await pool.query(query, params);
 
   const latency = Date.now() - start;
 

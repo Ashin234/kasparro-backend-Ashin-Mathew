@@ -1,11 +1,20 @@
+const { waitForDB } = require("../core/db");
 const ingestCoinPaprika = require("./coinpaprika.ingest");
 const ingestCSV = require("./csv.ingest");
 
 async function runETL() {
+  console.log("ETL started");
+
+  //  WAIT FOR DB BEFORE RUNNING ETL
+  await waitForDB();
+
   await ingestCoinPaprika();
-  console.log(`running csv ingestion`);
+  console.log("CoinPaprika ingestion done");
+
   await ingestCSV();
+  console.log("CSV ingestion done");
+
+  console.log("ETL completed");
 }
 
-runETL();
-
+module.exports = runETL;

@@ -1,19 +1,31 @@
-// require("dotenv").config({ path: ".env.local" });
+
+require("dotenv").config();
+
 const { Pool } = require("pg");
 
-const DATABASE_URL="postgres://postgres:sama123%40@127.0.0.1:5433/etl_db";
-
 const pool = new Pool({
-  connectionString: DATABASE_URL
+  host: process.env.DB_HOST,
+  port: process.env.DB_PORT,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME,
 });
 
-// (async () => {
-//   try {
-//     const res = await pool.query("SELECT NOW()");
-//     console.log(" DB connected:", res.rows[0]);
-//   } catch (err) {
-//     console.error(" DB connection failed:", err.message);
-//   }
-// })();
+async function waitForDB(retries = 10, delay = 2000) {
+  for (let i = 0; i < retries; i++) {
+    try {
+      await pool.query("SELECT 1");
+      console.log(" Database is ready");
+      return;
+    } catch (err) {
+      console.log(` Waiting for database... (${i + 1}/${retries})`);
+      await new Promise((res) => setTimeout(res, delay));
+    }
+  }
+  throw new Error("Database not ready after retries");
+}
 
-module.exports = pool;
+module.exports = {
+  pool,
+  waitForDB,
+};

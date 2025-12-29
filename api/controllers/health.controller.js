@@ -1,12 +1,12 @@
-const db = require("../../core/db");
+const { pool } = require("../../core/db");
 
 exports.healthCheck = async (req, res) => {
   try {
-    // 1️⃣ Check DB connectivity
-    await db.query("SELECT 1");
+    // Check DB connectivity
+    await pool.query("SELECT 1");
 
-    // 2️⃣ Get last ETL checkpoint
-    const checkpoint = await db.query(
+    // Get last ETL checkpoint
+    const checkpoint = await pool.query(
       "SELECT source, last_run FROM etl_checkpoint ORDER BY last_run DESC LIMIT 1"
     );
 
