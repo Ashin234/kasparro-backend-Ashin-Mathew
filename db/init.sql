@@ -33,3 +33,18 @@ CREATE TABLE IF NOT EXISTS etl_checkpoint (
   status TEXT,
   updated_at TIMESTAMP DEFAULT NOW()
 );
+
+-- =========================
+-- ETL STATUS
+-- =========================
+
+CREATE TABLE IF NOT EXISTS etl_runs (
+  id SERIAL PRIMARY KEY,
+  source TEXT NOT NULL,
+  status TEXT NOT NULL,          -- running | success | failed
+  records_processed INTEGER DEFAULT 0,
+  started_at TIMESTAMP NOT NULL,
+  finished_at TIMESTAMP,
+  duration_ms INTEGER,
+  error_message TEXT
+);

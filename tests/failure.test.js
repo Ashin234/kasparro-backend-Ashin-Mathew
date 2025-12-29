@@ -1,13 +1,15 @@
-const schema = require("../schemas/unified.schema");
+const request = require("supertest");
+const app = require("../api/app");
+const { pool } = require("../core/db");
 
-describe("Failure Scenario", () => {
-  test("schema rejects invalid data", () => {
-    const badData = {
-      name: "Bitcoin",
-      symbol: "BTC"
-      // missing coin_id and price
-    };
+describe("Failure Handling", () => {
+  test("DB failure returns error", async () => {
+    jest.spyOn(pool, "query").mockRejectedValueOnce(new Error("DB down"));
 
-    expect(() => schema.parse(badData)).toThrow();
+    const res = await request(app).get("/health");
+
+    expect(res.statusCode).toBe(500);
+
+    pool.query.mockRestore();
   });
 });

@@ -88,3 +88,32 @@ All normalized inserts into clean_crypto_prices are protected by:
 - Database-level unique constraints : ON CONFLICT DO NOTHING logic
 
 This guarantees that re-running ETL never creates duplicates, even after failures or restarts.
+
+## stats API (ETL Observability)
+
+A dedicated /stats endpoint was implemented to provide visibility into ETL execution.
+
+What it reports:
+- Total successful and failed ETL runs
+- Timestamp of the most recent run
+- Last successful and failed executions
+- Total records processed across runs
+- Duration of the most recent ETL execution
+
+Why this matters
+Enables quick health checks of ETL pipelines
+
+## Automated Testing
+
+A minimal yet meaningful test suite was added to validate system correctness.
+
+Test coverage includes:
+
+- Schema validation tests
+- Ensures malformed or invalid data is rejected before ingestion.
+- Incremental ingestion tests
+- Verifies checkpoint tables exist and ETL progress is tracked correctly.
+- API tests
+  Confirms API endpoints return expected responses.
+- Failure handling tests
+  Validates graceful behavior during database or runtime failures.

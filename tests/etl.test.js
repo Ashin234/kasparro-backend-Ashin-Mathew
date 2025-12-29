@@ -1,26 +1,30 @@
 const schema = require("../schemas/unified.schema");
 
-describe("ETL Transformation", () => {
-  test("valid raw data transforms into clean schema", () => {
-    const raw = {
-      coin_id: "btc-bitcoin",
+describe("ETL Schema Validation", () => {
+  test("valid crypto record passes schema", () => {
+    const data = {
+      coin_id: "bitcoin",
       name: "Bitcoin",
       symbol: "BTC",
-      price_usd: "42000",
-      last_updated: "2024-01-01T00:00:00Z",
-      source: "csv"
+      price_usd: 45000,
+      source: "localcsv",
+      last_updated: new Date(),
     };
 
-    const clean = schema.parse({
-      coin_id: raw.coin_id,
-      name: raw.name,
-      symbol: raw.symbol,
-      price_usd: Number(raw.price_usd),
-      source: raw.source,
-      last_updated: new Date(raw.last_updated)
-    });
+    const parsed = schema.parse(data);
+    expect(parsed.symbol).toBe("BTC");
+  });
 
-    expect(clean.price_usd).toBe(42000);
-    expect(clean.symbol).toBe("BTC");
+  test("invalid price should fail", () => {
+    const badData = {
+      coin_id: "eth",
+      name: "Ethereum",
+      symbol: "ETH",
+      price_usd: "not-a-number",
+      source: "csv",
+      last_updated: new Date(),
+    };
+
+    expect(() => schema.parse(badData)).toThrow();
   });
 });
