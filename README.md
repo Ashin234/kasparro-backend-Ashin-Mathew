@@ -66,3 +66,25 @@ What is tested:
 
 Command to Run tests
 - npm test
+
+## Improved Incremental Ingestion
+
+This system implements production-grade incremental ETL ingestion with strong failure recovery guarantees.
+
+Key Features
+
+1. Checkpoint-based Progress Tracking
+- Each ingestion source maintains its own checkpoint in the         etl_checkpoint table.
+- The checkpoint stores the last successfully processed record value, not runtime metadata.
+
+2. Resume-on-Failure Logic
+If the ETL process crashes or is interrupted mid-run:
+- Successfully processed data is preserved
+- The next ETL run resumes from the last safe checkpoint
+- No data loss occurs
+
+3. Idempotent Writes
+All normalized inserts into clean_crypto_prices are protected by:
+- Database-level unique constraints : ON CONFLICT DO NOTHING logic
+
+This guarantees that re-running ETL never creates duplicates, even after failures or restarts.

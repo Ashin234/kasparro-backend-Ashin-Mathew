@@ -4,21 +4,36 @@ const ingestCSV = require("./csv.ingest");
 const ingestLocalCSV = require("./localcsv.ingest");
 
 async function runETL() {
-  console.log("ETL started");
+  console.log(" ETL started");
 
-  //  WAIT FOR DB BEFORE RUNNING ETL
+  //  Ensure DB is ready
   await waitForDB();
 
-  await ingestCoinPaprika();
-  console.log("CoinPaprika ingestion done");
+  //  Run CoinPaprika ingestion safely
+  try {
+    await ingestCoinPaprika();
+    console.log(" CoinPaprika ingestion done");
+  } catch (err) {
+    console.error(" CoinPaprika ingestion failed:", err.message);
+  }
 
-  await ingestCSV();
-  console.log("CSV ingestion done");
+  //  Run CSV ingestion safely
+  try {
+    await ingestCSV();
+    console.log(" CSV ingestion done");
+  } catch (err) {
+    console.error(" CSV ingestion failed:", err.message);
+  }
 
-  await ingestLocalCSV();
-  console.log("Local CSV ingestion done");
+  //  Run Local CSV ingestion safely
+  try {
+    await ingestLocalCSV();
+    console.log(" Local CSV ingestion done");
+  } catch (err) {
+    console.error(" Local CSV ingestion failed:", err.message);
+  }
 
-  console.log("ETL completed");
+  console.log(" ETL completed");
 }
 
 module.exports = runETL;
