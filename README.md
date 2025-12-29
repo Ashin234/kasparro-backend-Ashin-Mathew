@@ -34,20 +34,21 @@ Prerequisites
 Environment Setup
 
 Create a local environment file from the example:
-
 - cp .env.example .env 
 
-- To start in Linux / macOS use -- make up
-- To start in Windows (without make) -- docker-compose up --build
+Linux / macOS
+- start system -- make up
+- stop system -- make down
+- run Tests -- make test
 
-This : 
+Windows(without make)
+- start system -- docker-compose up --build
+- stop system -- docker-compose down
+- run Tests -- docker-compose run api npm test
+
+starting system: 
 
 - Start PostgreSQL
 - Initialize database schema
 - Run ETL pipelines automatically
 - Start the API server
-
-To stop in Linux / macOS -- make down
-To stop in Windows -- docker-compose down
-To run Tests in Linux / macOS -- make test
-To run Tests in Windows -- docker-compose run api npm test
