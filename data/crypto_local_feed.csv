@@ -1,0 +1,4 @@
+asset_id,asset_name,ticker,price,last_seen
+bitcoin,Bitcoin,BTC,43210.22,2025-01-02
+ethereum,Ethereum,ETH,2361.55,2025-01-02
+cardano,Cardano,ADA,0.54,2025-01-02

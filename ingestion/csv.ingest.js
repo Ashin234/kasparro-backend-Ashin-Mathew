@@ -10,20 +10,19 @@ function ingestCSV() {
   return new Promise((resolve, reject) => {
     console.log(" Running CSV ingestion");
 
-    //  Safe absolute path
     const csvPath = path.join(__dirname, "../data/crypto_prices.csv");
 
     fs.createReadStream(csvPath)
       .pipe(csv())
       .on("data", async (row) => {
         try {
-          //  Store RAW
+          //  Store RAW (unified raw table)
           await pool.query(
-            "INSERT INTO raw_csv_crypto (payload) VALUES ($1)",
-            [row]
+            "INSERT INTO raw_crypto (source, payload) VALUES ($1, $2)",
+            [SOURCE, row]
           );
 
-          //  Validate & normalize
+          //  Normalize & validate
           const clean = schema.parse({
             coin_id: row.coin_id,
             name: row.name,
@@ -33,13 +32,13 @@ function ingestCSV() {
             last_updated: new Date(row.last_updated),
           });
 
-          //  Idempotent insert
+          //  Idempotent insert (no duplicates)
           await pool.query(
             `
             INSERT INTO clean_crypto_prices
             (coin_id, name, symbol, price_usd, source, last_updated)
             VALUES ($1, $2, $3, $4, $5, $6)
-            ON CONFLICT (coin_id, source)
+            ON CONFLICT (coin_id, source, last_updated)
             DO NOTHING
             `,
             [
@@ -52,12 +51,12 @@ function ingestCSV() {
             ]
           );
         } catch (err) {
-          reject(err); // propagate error to ETL
+          reject(err);
         }
       })
       .on("end", () => {
-        console.log( "CSV ingestion complete");
-        resolve(); // signal completion
+        console.log(" CSV ingestion complete");
+        resolve();
       })
       .on("error", (err) => {
         reject(err);
