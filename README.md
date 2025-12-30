@@ -48,12 +48,12 @@ The system is designed to demonstrate real-world backend engineering practices, 
 2. Create a local environment file from the example:
 - cp .env.example .env 
 3. Important Commands:
-- Linux / macOS
+# Linux / macOS
 - To start system -- make up
 - To stop system -- make down
 - To run Tests -- make test
 
-- Windows(without make)
+# Windows(without make)
 - To start system -- docker compose up --build -d
 - To stop system -- docker-compose down
 - To run Tests -- docker exec -it backend_api npm test
