@@ -7,7 +7,7 @@ const PORT = process.env.PORT || 3000;
 
 async function startServer() {
   try {
-    // 🔥 Run ETL BEFORE starting API
+    //  Run ETL BEFORE starting API
     await runETL();
 
     app.listen(PORT, () => {

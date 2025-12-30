@@ -9,7 +9,7 @@ exports.getStats = async (req, res) => {
       stats,
     });
   } catch (err) {
-    console.error("❌ /stats failed:", err.message);
+    console.error(" /stats failed:", err.message);
     res.status(500).json({ status: "error" });
   }
 };

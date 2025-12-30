@@ -117,3 +117,13 @@ Test coverage includes:
   Confirms API endpoints return expected responses.
 - Failure handling tests
   Validates graceful behavior during database or runtime failures.
+
+## API access and Authentication
+
+All API endpoints are protected using an API key.
+
+### Header
+x-api-key: <API_KEY>
+
+### Example
+curl -H "x-api-key: kasparro_test_key" http://localhost:3000/data

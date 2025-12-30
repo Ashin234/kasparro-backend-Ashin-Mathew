@@ -7,7 +7,7 @@ const SOURCE = "coinpaprika";
 
 async function ingestCoinPaprika() {
 
-  // 0️⃣ Start ETL run
+  // Start ETL run
  
   const startTime = Date.now();
   let processedCount = 0;
@@ -23,7 +23,7 @@ async function ingestCoinPaprika() {
 
   const runId = runRes.rows[0].id;
 
-  // 1️⃣ Read checkpoint
+  //  Read checkpoint
 
   const checkpointRes = await pool.query(
     "SELECT last_run FROM etl_checkpoint WHERE source = $1",
@@ -37,14 +37,14 @@ async function ingestCoinPaprika() {
 
   try {
 
-    // 2️⃣ Fetch API data
+    //  Fetch API data
 
     const response = await axios.get(
       "https://api.coinpaprika.com/v1/tickers",
       { timeout: 10000 }
     );
 
-    // 3️⃣ Process data incrementally
+    //  Process data incrementally
  
     for (const coin of response.data) {
       const updatedAt = new Date(coin.last_updated);
@@ -52,7 +52,7 @@ async function ingestCoinPaprika() {
       // Skip already-processed records
       if (updatedAt <= lastRun) continue;
 
-      // 4️⃣ Store RAW data (audit)
+      //  Store RAW data (audit)
 
       await pool.query(
         `
@@ -62,7 +62,7 @@ async function ingestCoinPaprika() {
         [SOURCE, coin]
       );
 
-      // 5️⃣ Normalize & validate
+      //  Normalize & validate
 
       const cleanData = schema.parse({
         coin_id: coin.id,
@@ -73,7 +73,7 @@ async function ingestCoinPaprika() {
         last_updated: updatedAt,
       });
 
-      // 6️⃣ Idempotent insert into clean table
+      //  Idempotent insert into clean table
     
       await pool.query(
         `
@@ -102,7 +102,7 @@ async function ingestCoinPaprika() {
       }
     }
 
-    // 7️⃣ Update checkpoint AFTER successful run
+    //  Update checkpoint AFTER successful run
 
     await pool.query(
       `
@@ -117,7 +117,7 @@ async function ingestCoinPaprika() {
       [SOURCE, maxProcessedTimestamp]
     );
 
-    // 8️⃣ Mark ETL run as SUCCESS
+    //  Mark ETL run as SUCCESS
     
     const durationMs = Date.now() - startTime;
 
@@ -133,10 +133,10 @@ async function ingestCoinPaprika() {
       [processedCount, durationMs, runId]
     );
 
-    console.log("✅ CoinPaprika ingestion complete");
+    console.log(" CoinPaprika ingestion complete");
   } catch (err) {
 
-    // 9️⃣ Handle failure properly
+    // Handle failure properly
    
     const durationMs = Date.now() - startTime;
 

@@ -1,7 +1,7 @@
 const request = require("supertest");
 
 /**
- * ✅ MOCK core/db BEFORE importing app
+ *  MOCK core/db BEFORE importing app
  * We must mock pool.query because the app uses pool
  */
 jest.mock("../core/db", () => ({

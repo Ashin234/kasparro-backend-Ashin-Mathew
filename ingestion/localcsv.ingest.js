@@ -8,11 +8,10 @@ const schema = require("../schemas/unified.schema");
 const SOURCE = "localcsv";
 
 async function ingestLocalCSV() {
-  console.log("➡️ Running local CSV ingestion (incremental + idempotent)");
+  console.log("Running local CSV ingestion (incremental + idempotent)");
 
-  // ─────────────────────────────────────────────
-  // 0️⃣ Start ETL run
-  // ─────────────────────────────────────────────
+  //  Start ETL run
+
   const startTime = Date.now();
   let processedCount = 0;
 
@@ -27,9 +26,8 @@ async function ingestLocalCSV() {
 
   const runId = runRes.rows[0].id;
 
-  // ─────────────────────────────────────────────
-  // 1️⃣ Read checkpoint
-  // ─────────────────────────────────────────────
+  //  Read checkpoint
+ 
   const checkpointRes = await pool.query(
     "SELECT last_run FROM etl_checkpoint WHERE source = $1",
     [SOURCE]
@@ -41,9 +39,9 @@ async function ingestLocalCSV() {
   let maxProcessedTimestamp = lastRun;
 
   try {
-    // ─────────────────────────────────────────────
-    // 2️⃣ Read CSV fully
-    // ─────────────────────────────────────────────
+  
+    //  Read CSV fully
+ 
     const csvPath = path.join(__dirname, "../data/crypto_local_feed.csv");
     const rows = [];
 
@@ -56,18 +54,17 @@ async function ingestLocalCSV() {
 
     await once(stream, "end");
 
-    // ─────────────────────────────────────────────
-    // 3️⃣ Process rows sequentially (incremental)
-    // ─────────────────────────────────────────────
+    //  Process rows sequentially (incremental)
+
     for (const row of rows) {
       const updatedAt = new Date(row.last_seen);
 
       // Skip already processed records
       if (updatedAt <= lastRun) continue;
 
-      // ─────────────────────────────────────────
-      // 4️⃣ Store RAW data (audit/debug)
-      // ─────────────────────────────────────────
+
+      //  Store RAW data (audit/debug)
+
       await pool.query(
         `
         INSERT INTO raw_crypto (source, payload)
@@ -76,9 +73,9 @@ async function ingestLocalCSV() {
         [SOURCE, row]
       );
 
-      // ─────────────────────────────────────────
-      // 5️⃣ Normalize & validate
-      // ─────────────────────────────────────────
+      
+      //  Normalize & validate
+      
       const clean = schema.parse({
         coin_id: row.asset_id,
         name: row.asset_name,
@@ -88,9 +85,9 @@ async function ingestLocalCSV() {
         last_updated: updatedAt,
       });
 
-      // ─────────────────────────────────────────
-      // 6️⃣ Idempotent insert (NO duplicates)
-      // ─────────────────────────────────────────
+      
+      //  Idempotent insert (NO duplicates)
+      
       await pool.query(
         `
         INSERT INTO clean_crypto_prices
@@ -116,9 +113,9 @@ async function ingestLocalCSV() {
       }
     }
 
-    // ─────────────────────────────────────────────
-    // 7️⃣ Update checkpoint AFTER success
-    // ─────────────────────────────────────────────
+   
+    //  Update checkpoint AFTER success
+   
     await pool.query(
       `
       INSERT INTO etl_checkpoint (source, last_run, status)
@@ -132,9 +129,9 @@ async function ingestLocalCSV() {
       [SOURCE, maxProcessedTimestamp]
     );
 
-    // ─────────────────────────────────────────────
-    // 8️⃣ Mark ETL run SUCCESS
-    // ─────────────────────────────────────────────
+   
+    //  Mark ETL run SUCCESS
+   
     const durationMs = Date.now() - startTime;
 
     await pool.query(
@@ -149,11 +146,11 @@ async function ingestLocalCSV() {
       [processedCount, durationMs, runId]
     );
 
-    console.log("✅ Local CSV ingestion complete (incremental + idempotent)");
+    console.log(" Local CSV ingestion complete (incremental + idempotent)");
   } catch (err) {
-    // ─────────────────────────────────────────────
-    // 9️⃣ Handle failure properly
-    // ─────────────────────────────────────────────
+   
+    //  Handle failure properly
+   
     const durationMs = Date.now() - startTime;
 
     // Mark ETL run failed
