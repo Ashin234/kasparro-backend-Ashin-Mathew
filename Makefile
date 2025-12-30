@@ -1,8 +1,8 @@
 up:
-	docker-compose up --build
+	docker compose up --build -d
 
 down:
 	docker-compose down
 
 test:
-	docker-compose run api npm test
+	docker exec -it backend_api npm test

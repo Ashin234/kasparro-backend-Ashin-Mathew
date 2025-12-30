@@ -2,128 +2,150 @@
 ## BACKEND & ETL SYSTEM
 
 ## Overview
-Production-style Backend & ETL system that ingests crypto data from
-multiple sources, normalizes it, and exposes a queryable API.
+This project is a production-style Backend & ETL system that ingests cryptocurrency data from multiple sources, normalizes it into a unified schema, and exposes a queryable REST API.
 
-### Components
-- ingestion/: Data ingestion pipelines
-- schemas/: Validation & normalization
+The system is designed to demonstrate real-world backend engineering practices, including incremental ETL, idempotent writes, observability, automated testing, and Docker-based deployment.
+
+## Architecture
+        Data Sources
+  (API / CSV / Third Source)
+              │
+              ▼
+        ETL Pipelines
+(Extract • Transform • Load)
+              │
+              ▼
+         PostgreSQL
+  (Raw + Clean + Checkpoints)
+              │
+              ▼
+         REST API
+   (Express.js Endpoints)
+              │
+              ▼
+           Clients
+      (Users / Evaluators)
+
+## Tech Stack
+
+- Node.js (JavaScript) – Runtime used for both ETL pipelines and API services, enabling asynchronous and efficient data processing.
+
+- Express.js – Lightweight web framework for building REST APIs (/data, /health, /stats).
+
+- PostgreSQL – Relational database used for raw data storage, normalized clean tables, - ETL checkpoints, and run metadata.
+
+- Docker & Docker Compose – Containerization and service orchestration for reproducible, one-command system startup.
+
+- Jest – Testing framework used for ETL logic, API endpoints, and failure scenarios.
+
+- Environment Variables (.env) – Secure configuration management for API keys and database credentials.
+
+## Components
+
 - api/: REST API service
-- core/: Shared infrastructure (DB, config)
+- core/: Shared infrastructure (DB, Ckeckpoint)
+- data/: csv files
+- db/: sql schema
+- ingestion/: ETL pipelines for multiple data sources
+- schemas/: Unified schema validation and normalization
+- tests/: Automated test suite
 
-## API Endpoints
-GET /data  
-GET /health  
+## Environment Setup
 
-GET /data
-Supports pagination and filtering.
-
-Query params:
-- limit
-- offset
-- symbol
-
-GET /health
-Checks database connectivity and ETL checkpoint status.
-
-## Dockerization
-Prerequisites
-
-- Docker
-
-Environment Setup
-
-Create a local environment file from the example:
+1. Docker installed
+2. Create a local environment file from the example:
 - cp .env.example .env 
-
+3. Important Commands:
 Linux / macOS
-- start system -- make up
-- stop system -- make down
-- run Tests -- make test
+- To start system -- make up
+- To stop system -- make down
+- To run Tests -- make test
 
 Windows(without make)
-- start system -- docker-compose up --build
-- stop system -- docker-compose down
-- run Tests -- docker-compose run api npm test
+- To start system -- docker compose up --build -d
+- To stop system -- docker-compose down
+- To run Tests -- docker exec -it backend_api npm test
 
-starting system: 
-
+This:
 - Start PostgreSQL
 - Initialize database schema
 - Run ETL pipelines automatically
 - Start the API server
 
-## Testing
+## Steps followed
 
-This project includes a minimal but production-grade test suite.
+1. Data Ingestion
 
-What is tested:
+1 API source (API key via env)
 
-- ETL transformation logic
-- API health endpoint
-- Failure scenarios
-- Schema validation
+1 CSV source
 
-Command to Run tests
-- npm test
+Raw storage (raw_* tables)
 
-## Improved Incremental Ingestion
+Unified schema with type validation
 
-This system implements production-grade incremental ETL ingestion with strong failure recovery guarantees.
+Incremental ingestion (no reprocessing)
 
-Key Features
+2. Backend API
 
-1. Checkpoint-based Progress Tracking
-- Each ingestion source maintains its own checkpoint in the         etl_checkpoint table.
-- The checkpoint stores the last successfully processed record value, not runtime metadata.
+GET /data – pagination, filtering, request metadata
 
-2. Resume-on-Failure Logic
-If the ETL process crashes or is interrupted mid-run:
-- Successfully processed data is preserved
-- The next ETL run resumes from the last safe checkpoint
-- No data loss occurs
+GET /health – DB connectivity & ETL status
 
-3. Idempotent Writes
-All normalized inserts into clean_crypto_prices are protected by:
-- Database-level unique constraints : ON CONFLICT DO NOTHING logic
+3. Dockerized System
 
-This guarantees that re-running ETL never creates duplicates, even after failures or restarts.
+Runnable via:
 
-## stats API (ETL Observability)
+make up
+make down
+make test
 
-A dedicated /stats endpoint was implemented to provide visibility into ETL execution.
+Includes Dockerfile, docker-compose, Makefile, README
 
-What it reports:
-- Total successful and failed ETL runs
-- Timestamp of the most recent run
-- Last successful and failed executions
-- Total records processed across runs
-- Duration of the most recent ETL execution
+ETL + API start automatically
 
-Why this matters
-Enables quick health checks of ETL pipelines
+4. Testing
 
-## Automated Testing
+ETL logic
 
-A minimal yet meaningful test suite was added to validate system correctness.
+API endpoint
 
-Test coverage includes:
+Failure scenario
 
-- Schema validation tests
-- Ensures malformed or invalid data is rejected before ingestion.
-- Incremental ingestion tests
-- Verifies checkpoint tables exist and ETL progress is tracked correctly.
-- API tests
-  Confirms API endpoints return expected responses.
-- Failure handling tests
-  Validates graceful behavior during database or runtime failures.
+5. Third Data Source(CSV) added and unified
 
-## API access and Authentication
+6. Incremental ETL
 
-All API endpoints are protected using an API key.
+Checkpoint table
+
+Resume-on-failure
+
+Idempotent writes
+
+7. Observability
+
+GET /stats – records, duration, success/failure metadata
+
+8. Expanded Testing
+
+Incremental ingestion
+
+Failures
+
+Schema mismatches
+
+API endpoints
+
+9. API Access & Authentication
+
+All API endpoints(except health) require an API key
+
+Authentication enforced via request headers
+
+API keys are securely managed using environment variables / cloud secrets
 
 ### Header
 x-api-key: <API_KEY>
 
-### Example
-curl -H "x-api-key: kasparro_test_key" http://localhost:3000/data
+### Example Test
+curl -H "x-api-key: my_api_key" http://localhost:3000/data
