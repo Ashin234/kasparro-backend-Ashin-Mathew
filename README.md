@@ -1,5 +1,5 @@
 
-### BACKEND & ETL SYSTEM
+# BACKEND & ETL SYSTEM
 
 ## Overview
 This project is a production-style Backend & ETL system that ingests cryptocurrency data from multiple sources, normalizes it into a unified schema, and exposes a queryable REST API.
