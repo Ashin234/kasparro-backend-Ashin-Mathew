@@ -8,21 +8,13 @@ The system is designed to demonstrate real-world backend engineering practices, 
 
 ## Architecture
         Data Sources
-  (API / CSV / Third Source)
-              │
-              ▼
+  (API / CSV / Third Source) -->
         ETL Pipelines
-(Extract • Transform • Load)
-              │
-              ▼
+(Extract • Transform • Load) -->
          PostgreSQL
-  (Raw + Clean + Checkpoints)
-              │
-              ▼
+  (Raw + Clean + Checkpoints) -->
          REST API
-   (Express.js Endpoints)
-              │
-              ▼
+   (Express.js Endpoints) -->
            Clients
       (Users / Evaluators)
 
@@ -56,17 +48,17 @@ The system is designed to demonstrate real-world backend engineering practices, 
 2. Create a local environment file from the example:
 - cp .env.example .env 
 3. Important Commands:
-Linux / macOS
+- Linux / macOS
 - To start system -- make up
 - To stop system -- make down
 - To run Tests -- make test
 
-Windows(without make)
+- Windows(without make)
 - To start system -- docker compose up --build -d
 - To stop system -- docker-compose down
 - To run Tests -- docker exec -it backend_api npm test
 
-This:
+- This:
 - Start PostgreSQL
 - Initialize database schema
 - Run ETL pipelines automatically
@@ -76,76 +68,76 @@ This:
 
 1. Data Ingestion
 
-1 API source (API key via env)
+- 1 API source (API key via env)
 
-1 CSV source
+- 1 CSV source
 
-Raw storage (raw_* tables)
+- Raw storage (raw_* tables)
 
-Unified schema with type validation
+- Unified schema with type validation
 
-Incremental ingestion (no reprocessing)
+- Incremental ingestion (no reprocessing)
 
 2. Backend API
 
-GET /data – pagination, filtering, request metadata
+- GET /data – pagination, filtering, request metadata
 
-GET /health – DB connectivity & ETL status
+- GET /health – DB connectivity & ETL status
 
 3. Dockerized System
 
-Runnable via:
+- Runnable via:
 
-make up
-make down
-make test
+- make up
+- make down
+- make test
 
-Includes Dockerfile, docker-compose, Makefile, README
+- Includes Dockerfile, docker-compose, Makefile, README
 
-ETL + API start automatically
+- ETL + API start automatically
 
 4. Testing
 
-ETL logic
+- ETL logic
 
-API endpoint
+- API endpoint
 
-Failure scenario
+- Failure scenario
 
 5. Third Data Source(CSV) added and unified
 
 6. Incremental ETL
 
-Checkpoint table
+- Checkpoint table
 
-Resume-on-failure
+- Resume-on-failure
 
-Idempotent writes
+- Idempotent writes
 
 7. Observability
 
-GET /stats – records, duration, success/failure metadata
+- GET /stats – records, duration, success/failure metadata
 
 8. Expanded Testing
 
-Incremental ingestion
+- Incremental ingestion
 
-Failures
+- Failures
 
-Schema mismatches
+- Schema mismatches
 
-API endpoints
+- API endpoints
 
 9. API Access & Authentication
 
-All API endpoints(except health) require an API key
+- All API endpoints(except health) require an API key
 
-Authentication enforced via request headers
+- Authentication enforced via request headers
 
-API keys are securely managed using environment variables / cloud secrets
+- API keys are securely managed using environment variables / cloud secrets
 
 ### Header
-x-api-key: <API_KEY>
+- x-api-key: <API_KEY>
 
 ### Example Test
-curl -H "x-api-key: my_api_key" http://localhost:3000/data
+- curl -H "x-api-key: my_api_key" http://<url>/data
