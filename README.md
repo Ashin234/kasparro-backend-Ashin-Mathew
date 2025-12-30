@@ -1,5 +1,5 @@
 
-## BACKEND & ETL SYSTEM
+### BACKEND & ETL SYSTEM
 
 ## Overview
 This project is a production-style Backend & ETL system that ingests cryptocurrency data from multiple sources, normalizes it into a unified schema, and exposes a queryable REST API.
@@ -48,17 +48,17 @@ The system is designed to demonstrate real-world backend engineering practices, 
 2. Create a local environment file from the example:
 - cp .env.example .env 
 3. Important Commands:
-# Linux / macOS
+### Linux / macOS
 - To start system -- make up
 - To stop system -- make down
 - To run Tests -- make test
 
-# Windows(without make)
+### Windows(without make)
 - To start system -- docker compose up --build -d
 - To stop system -- docker-compose down
 - To run Tests -- docker exec -it backend_api npm test
 
-- This:
+This:
 - Start PostgreSQL
 - Initialize database schema
 - Run ETL pipelines automatically
@@ -66,7 +66,7 @@ The system is designed to demonstrate real-world backend engineering practices, 
 
 ## Steps followed
 
-1. Data Ingestion
+### 1. Data Ingestion
 
 - 1 API source (API key via env)
 
@@ -78,15 +78,15 @@ The system is designed to demonstrate real-world backend engineering practices, 
 
 - Incremental ingestion (no reprocessing)
 
-2. Backend API
+### 2. Backend API
 
 - GET /data – pagination, filtering, request metadata
 
 - GET /health – DB connectivity & ETL status
 
-3. Dockerized System
+### 3. Dockerized System
 
-- Runnable via:
+Runnable via:
 
 - make up
 - make down
@@ -96,7 +96,7 @@ The system is designed to demonstrate real-world backend engineering practices, 
 
 - ETL + API start automatically
 
-4. Testing
+### 4. Testing
 
 - ETL logic
 
@@ -104,9 +104,9 @@ The system is designed to demonstrate real-world backend engineering practices, 
 
 - Failure scenario
 
-5. Third Data Source(CSV) added and unified
+### 5. Third Data Source(CSV) added and unified
 
-6. Incremental ETL
+### 6. Incremental ETL
 
 - Checkpoint table
 
@@ -114,11 +114,11 @@ The system is designed to demonstrate real-world backend engineering practices, 
 
 - Idempotent writes
 
-7. Observability
+### 7. Observability
 
 - GET /stats – records, duration, success/failure metadata
 
-8. Expanded Testing
+### 8. Expanded Testing
 
 - Incremental ingestion
 
@@ -128,7 +128,7 @@ The system is designed to demonstrate real-world backend engineering practices, 
 
 - API endpoints
 
-9. API Access & Authentication
+### 9. API Access & Authentication
 
 - All API endpoints(except health) require an API key
 
