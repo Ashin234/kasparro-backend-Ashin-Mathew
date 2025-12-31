@@ -36,4 +36,14 @@ async function runETL() {
   console.log(" ETL completed");
 }
 
+// 🔑 KEY SAFETY CHECK
+if (require.main === module) {
+  runETL()
+    .then(() => process.exit(0))
+    .catch((err) => {
+      console.error("❌ ETL failed", err);
+      process.exit(1);
+    });
+}
+
 module.exports = runETL;
