@@ -45,7 +45,7 @@ The system is designed to demonstrate real-world backend engineering practices, 
 ## Environment Setup
 
 1. Docker installed
-2. Create a local environment file from the example:
+2. Create a local environment file from the example adding database password and username:
 - cp .env.example .env 
 3. Important Commands:
 ### Linux / macOS

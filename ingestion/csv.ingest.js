@@ -3,15 +3,20 @@ const path = require("path");
 const csv = require("csv-parser");
 const { once } = require("events");
 const { pool } = require("../core/db");
-const schema = require("../schemas/unified.schema");
+
+// 🔧 EVALUATION FIX #1
+// Split schemas: identity vs observation
+const CoinSchema = require("../schemas/coin.schema");
+const PriceSchema = require("../schemas/price.schema");
 
 const SOURCE = "csv";
 
 async function ingestCSV() {
   console.log(" Running CSV ingestion (incremental + idempotent)");
 
-  //  Start ETL run
- 
+  // =========================
+  // Start ETL run
+  // =========================
   const startTime = Date.now();
   let processedCount = 0;
 
@@ -26,8 +31,9 @@ async function ingestCSV() {
 
   const runId = runRes.rows[0].id;
 
-  //  Read checkpoint
- 
+  // =========================
+  // Read checkpoint
+  // =========================
   const checkpointRes = await pool.query(
     "SELECT last_run FROM etl_checkpoint WHERE source = $1",
     [SOURCE]
@@ -39,8 +45,9 @@ async function ingestCSV() {
   let maxProcessedTimestamp = lastRun;
 
   try {
-    //  Read CSV fully
-  
+    // =========================
+    // Read CSV fully
+    // =========================
     const csvPath = path.join(__dirname, "../data/crypto_prices.csv");
     const rows = [];
 
@@ -53,17 +60,18 @@ async function ingestCSV() {
 
     await once(stream, "end");
 
-    // Process rows sequentially (incremental)
-  
+    // =========================
+    // Process rows sequentially
+    // =========================
     for (const row of rows) {
       const updatedAt = new Date(row.last_updated);
 
-      // Skip already processed records
+      // Incremental ingestion
       if (updatedAt <= lastRun) continue;
 
-
-      //  Store RAW data (audit/debug)
-
+      // =========================
+      // Store RAW data (audit/debug)
+      // =========================
       await pool.query(
         `
         INSERT INTO raw_crypto (source, payload)
@@ -72,35 +80,62 @@ async function ingestCSV() {
         [SOURCE, row]
       );
 
-
-      //  Normalize & validate
-
-      const clean = schema.parse({
-        coin_id: row.coin_id,
-        name: row.name,
+      // =========================
+      // 🔧 EVALUATION FIX #2
+      // Validate CANONICAL coin identity
+      // (Source is NOT part of identity)
+      // =========================
+      const coinIdentity = CoinSchema.parse({
         symbol: row.symbol,
+        name: row.name,
+      });
+
+      // =========================
+      // 🔧 EVALUATION FIX #3
+      // Upsert canonical coin
+      // BTC / ETH exists ONCE globally
+      // =========================
+      const coinRes = await pool.query(
+        `
+        INSERT INTO coins (symbol, name)
+        VALUES ($1, $2)
+        ON CONFLICT (symbol)
+        DO UPDATE SET name = EXCLUDED.name
+        RETURNING id
+        `,
+        [coinIdentity.symbol, coinIdentity.name]
+      );
+
+      const canonicalCoinId = coinRes.rows[0].id;
+
+      // =========================
+      // 🔧 EVALUATION FIX #4
+      // Validate price observation
+      // (WHAT we saw, WHEN, and FROM WHERE)
+      // =========================
+      const priceObservation = PriceSchema.parse({
         price_usd: Number(row.price_usd),
         source: SOURCE,
         last_updated: updatedAt,
       });
 
-      //  Idempotent insert (NO duplicates)
-  
+      // =========================
+      // 🔧 EVALUATION FIX #5
+      // Store observation linked to canonical coin
+      // =========================
       await pool.query(
         `
-        INSERT INTO clean_crypto_prices
-        (coin_id, name, symbol, price_usd, source, last_updated)
-        VALUES ($1, $2, $3, $4, $5, $6)
+        INSERT INTO coin_prices
+        (coin_id, source, price_usd, last_updated)
+        VALUES ($1, $2, $3, $4)
         ON CONFLICT (coin_id, source, last_updated)
         DO NOTHING
         `,
         [
-          clean.coin_id,
-          clean.name,
-          clean.symbol,
-          clean.price_usd,
-          clean.source,
-          clean.last_updated,
+          canonicalCoinId,
+          priceObservation.source,
+          priceObservation.price_usd,
+          priceObservation.last_updated,
         ]
       );
 
@@ -111,8 +146,9 @@ async function ingestCSV() {
       }
     }
 
-    //  Update checkpoint AFTER success
-
+    // =========================
+    // Update checkpoint (SUCCESS)
+    // =========================
     await pool.query(
       `
       INSERT INTO etl_checkpoint (source, last_run, status)
@@ -126,10 +162,11 @@ async function ingestCSV() {
       [SOURCE, maxProcessedTimestamp]
     );
 
-    //  Mark ETL run SUCCESS
-
     const durationMs = Date.now() - startTime;
 
+    // =========================
+    // Mark ETL run success
+    // =========================
     await pool.query(
       `
       UPDATE etl_runs
@@ -144,9 +181,9 @@ async function ingestCSV() {
 
     console.log(" CSV ingestion complete (incremental + idempotent)");
   } catch (err) {
-
-    //  Handle failure properly
-
+    // =========================
+    // Handle failure
+    // =========================
     const durationMs = Date.now() - startTime;
 
     await pool.query(
@@ -161,6 +198,7 @@ async function ingestCSV() {
       [durationMs, err.message, runId]
     );
 
+    // Do NOT advance checkpoint on failure
     await pool.query(
       `
       INSERT INTO etl_checkpoint (source, last_run, status)

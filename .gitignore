@@ -19,3 +19,5 @@ postgres_data
 # Coverage
 coverage/
 
+#schema
+schemas/unified.schema.js

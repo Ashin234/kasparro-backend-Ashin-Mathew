@@ -41,7 +41,7 @@ if (require.main === module) {
   runETL()
     .then(() => process.exit(0))
     .catch((err) => {
-      console.error("❌ ETL failed", err);
+      console.error(" ETL failed", err);
       process.exit(1);
     });
 }

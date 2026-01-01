@@ -1,5 +1,5 @@
 
-require("dotenv").config();
+require("dotenv").config({ quiet: true });
 
 const { Pool } = require("pg");
 

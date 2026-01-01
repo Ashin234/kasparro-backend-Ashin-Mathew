@@ -5,29 +5,54 @@ jest.mock("../core/db", () => ({
 }));
 
 const { pool } = require("../core/db");
+const {
+  getCheckpoint,
+  updateCheckpoint,
+} = require("../core/checkpoint");
 
-describe("Incremental ETL (Mocked)", () => {
+describe("ETL Checkpoint Logic", () => {
   afterEach(() => {
     jest.clearAllMocks();
   });
 
-  test("checkpoint table exists", async () => {
+  test("getCheckpoint returns checkpoint for a source", async () => {
+    const mockRow = {
+      source: "coinpaprika",
+      last_run: new Date("2025-01-01T10:00:00Z"),
+      status: "success",
+      updated_at: new Date(),
+    };
+
     pool.query.mockResolvedValueOnce({
-      rows: [{ exists: true }],
+      rows: [mockRow],
     });
 
-    const res = await pool.query("mock");
+    const checkpoint = await getCheckpoint("coinpaprika");
 
-    expect(res.rows[0].exists).toBe(true);
+    expect(pool.query).toHaveBeenCalledTimes(1);
+    expect(checkpoint).toEqual(mockRow);
   });
 
-  test("checkpoint updates after run", async () => {
-    pool.query.mockResolvedValueOnce({
-      rows: [{ last_run: new Date() }],
-    });
+  test("updateCheckpoint stores last_run on success", async () => {
+    pool.query.mockResolvedValueOnce({});
 
-    const res = await pool.query("mock");
+    const lastRun = new Date("2025-01-01T11:00:00Z");
 
-    expect(res.rows[0].last_run).not.toBeNull();
+    await updateCheckpoint("csv", lastRun, "success");
+
+    expect(pool.query).toHaveBeenCalledTimes(1);
+
+    const queryArgs = pool.query.mock.calls[0];
+    expect(queryArgs[1]).toEqual(["csv", lastRun, "success"]);
+  });
+
+  test("updateCheckpoint does not throw on failure update", async () => {
+    pool.query.mockResolvedValueOnce({});
+
+    const lastRun = new Date("2025-01-01T11:00:00Z");
+
+    await expect(
+      updateCheckpoint("localcsv", lastRun, "failed")
+    ).resolves.not.toThrow();
   });
 });

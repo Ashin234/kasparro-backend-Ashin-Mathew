@@ -3,7 +3,7 @@ const request = require("supertest");
 /**
  * Load environment variables for tests
  */
-require("dotenv").config();
+require("dotenv").config({ quiet: true });
 
 /**
  * MOCK core/db BEFORE importing app
@@ -28,18 +28,40 @@ describe("API Tests", () => {
    * --------------------
    */
 
-  test("GET /health returns system status", async () => {
+  test("GET /health returns system health and ETL status", async () => {
     pool.query
-      .mockResolvedValueOnce({ rows: [] }) // SELECT 1
+      .mockResolvedValueOnce({ rows: [] }) // SELECT 1 (DB check)
       .mockResolvedValueOnce({
-        rows: [{ last_run: new Date() }],
+        rows: [
+          {
+            source: "coinpaprika",
+            last_run: new Date(),
+            status: "success",
+            updated_at: new Date(),
+          },
+        ],
+      })
+      .mockResolvedValueOnce({
+        rows: [
+          {
+            source: "coinpaprika",
+            status: "success",
+            records_processed: 100,
+            started_at: new Date(),
+            finished_at: new Date(),
+            duration_ms: 5000,
+          },
+        ],
       });
 
     const res = await request(app).get("/health");
 
     expect(res.statusCode).toBe(200);
-    expect(res.body).toHaveProperty("db");
-    expect(res.body).toHaveProperty("etl_last_checkpoint");
+    expect(res.body).toHaveProperty("status", "ok");
+    expect(res.body).toHaveProperty("db", "connected");
+    expect(res.body).toHaveProperty("etl");
+    expect(res.body.etl).toHaveProperty("last_checkpoint");
+    expect(res.body.etl).toHaveProperty("last_run");
   });
 
   /**
@@ -48,15 +70,42 @@ describe("API Tests", () => {
    * --------------------
    */
 
-  test("GET /stats returns ETL stats (authorized)", async () => {
-    pool.query.mockResolvedValueOnce({
-      rows: [
-        {
-          total_records: 100,
-          last_run: new Date(),
-        },
-      ],
-    });
+  test("GET /stats returns ETL statistics (authorized)", async () => {
+    pool.query
+      .mockResolvedValueOnce({
+        rows: [
+          {
+            success_runs: "5",
+            failed_runs: "1",
+            last_run: new Date(),
+            last_success: new Date(),
+            last_failure: null,
+            total_records_processed: "500",
+          },
+        ],
+      })
+      .mockResolvedValueOnce({
+        rows: [
+          {
+            source: "coinpaprika",
+            status: "success",
+            records_processed: 300,
+            started_at: new Date(),
+            finished_at: new Date(),
+            duration_ms: 4000,
+          },
+        ],
+      })
+      .mockResolvedValueOnce({
+        rows: [
+          {
+            source: "coinpaprika",
+            last_run: new Date(),
+            status: "success",
+            updated_at: new Date(),
+          },
+        ],
+      });
 
     const res = await request(app)
       .get("/stats")
@@ -65,11 +114,23 @@ describe("API Tests", () => {
     expect(res.statusCode).toBe(200);
     expect(res.body).toHaveProperty("status", "ok");
     expect(res.body).toHaveProperty("stats");
+    expect(res.body.stats).toHaveProperty("summary");
+    expect(res.body.stats).toHaveProperty("latest_runs_by_source");
+    expect(res.body.stats).toHaveProperty("checkpoints");
+
   });
 
   test("GET /data returns paginated results (authorized)", async () => {
     pool.query.mockResolvedValueOnce({
-      rows: [{ symbol: "BTC", price_usd: 45000 }],
+      rows: [
+        {
+          symbol: "BTC",
+          name: "Bitcoin",
+          source: "coinpaprika",
+          price_usd: 45000,
+          last_updated: new Date(),
+        },
+      ],
     });
 
     const res = await request(app)
@@ -78,6 +139,8 @@ describe("API Tests", () => {
 
     expect(res.statusCode).toBe(200);
     expect(Array.isArray(res.body.data)).toBe(true);
+    expect(res.body).toHaveProperty("api_latency_ms");
+    expect(res.body).toHaveProperty("request_id");
   });
 
   /**

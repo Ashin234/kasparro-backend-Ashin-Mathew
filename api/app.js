@@ -1,4 +1,5 @@
-require("dotenv").config();
+require("dotenv").config({ quiet: true });
+
 const express = require("express");
 const requestId = require("./middlewares/requestId");
 const dataRoutes = require("./routes/data.routes");

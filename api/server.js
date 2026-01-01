@@ -1,4 +1,5 @@
-require("dotenv").config();
+require("dotenv").config({ quiet: true });
+
 
 const app = require("./app");
 const runETL = require("../ingestion/index");

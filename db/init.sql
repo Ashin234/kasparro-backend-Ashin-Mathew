@@ -9,15 +9,23 @@ CREATE TABLE IF NOT EXISTS raw_crypto (
 );
 
 -- =========================
--- CLEAN UNIFIED TABLE
+-- CANONICAL COIN ENTITY
 -- =========================
-CREATE TABLE IF NOT EXISTS clean_crypto_prices (
+CREATE TABLE IF NOT EXISTS coins (
   id SERIAL PRIMARY KEY,
-  coin_id TEXT NOT NULL,
+  symbol TEXT NOT NULL UNIQUE,
   name TEXT NOT NULL,
-  symbol TEXT NOT NULL,
-  price_usd NUMERIC NOT NULL,
+  created_at TIMESTAMP DEFAULT NOW()
+);
+
+-- =========================
+-- COIN PRICE OBSERVATIONS
+-- =========================
+CREATE TABLE IF NOT EXISTS coin_prices (
+  id SERIAL PRIMARY KEY,
+  coin_id INTEGER NOT NULL REFERENCES coins(id),
   source TEXT NOT NULL,
+  price_usd NUMERIC NOT NULL,
   last_updated TIMESTAMP NOT NULL,
   ingested_at TIMESTAMP DEFAULT NOW(),
 
@@ -35,9 +43,8 @@ CREATE TABLE IF NOT EXISTS etl_checkpoint (
 );
 
 -- =========================
--- ETL STATUS
+-- ETL RUN METADATA
 -- =========================
-
 CREATE TABLE IF NOT EXISTS etl_runs (
   id SERIAL PRIMARY KEY,
   source TEXT NOT NULL,
