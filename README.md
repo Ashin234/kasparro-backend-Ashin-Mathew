@@ -143,13 +143,14 @@ Runnable via:
 
 - The ETL pipeline runs automatically on container startup.
 
-- Periodic ETL execution is scheduled using Linux cron on the EC2 instance.
-- 
+- Periodic 1 hour ETL execution is scheduled using Linux cron on the EC2 instance.
+
 - Health Check:  http://<EC2_PUBLIC_IP>:3000/health
 - Data API:      http://<EC2_PUBLIC_IP>:3000/data
 - Stats API:     http://<EC2_PUBLIC_IP>:3000/stats
 
 - Note: /data and /stats endpoints require an API key passed via the x-api-key request header.
+
 ### Header
 - x-api-key: <API_KEY>
 
