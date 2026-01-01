@@ -137,17 +137,18 @@ Runnable via:
 - API keys are securely managed using environment variables / cloud secrets
 
 ### 10. Cloud Deployment 
-- This system is deployed on AWS EC2 (Free Tier) and runs fully containerized using Docker.
+- This system is deployed on AWS EC2 and runs fully containerized using Docker.
 
 - The backend API is publicly accessible via the EC2 public IP.
 
 - The ETL pipeline runs automatically on container startup.
 
 - Periodic ETL execution is scheduled using Linux cron on the EC2 instance.
-
+- 
 - Health Check:  http://<EC2_PUBLIC_IP>:3000/health
 - Data API:      http://<EC2_PUBLIC_IP>:3000/data
 - Stats API:     http://<EC2_PUBLIC_IP>:3000/stats
+
 - Note: /data and /stats endpoints require an API key passed via the x-api-key request header.
 ### Header
 - x-api-key: <API_KEY>

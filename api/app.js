@@ -11,6 +11,19 @@ const app = express();
 app.use(express.json());
 app.use(requestId);
 
+// home route
+app.get("/", (req, res) => {
+  res.json({
+    status: "ok",
+    message: "Backend & ETL System is running",
+    endpoints: {
+      health: "/health",
+      stats: "/stats",
+      data: "/data",
+    },
+  });
+});
+
 //protected routes
 app.use("/data", dataRoutes);
 app.use("/stats", statsRoutes);

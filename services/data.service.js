@@ -15,7 +15,7 @@ async function getData({ limit = 50, offset = 0, symbol }) {
     JOIN coins c ON p.coin_id = c.id
   `;
 
-  // 🔧 EVALUATION FIX #1
+  //  EVALUATION FIX #1
   // Filter by canonical coin identity (symbol lives in coins)
   if (symbol) {
     query += ` WHERE c.symbol = $${paramIndex}`;
@@ -23,7 +23,7 @@ async function getData({ limit = 50, offset = 0, symbol }) {
     paramIndex++;
   }
 
-  // 🔧 EVALUATION FIX #2
+  //  EVALUATION FIX #2
   // Order by observation timestamp (not ingestion order)
   query += `
     ORDER BY p.last_updated DESC

@@ -4,7 +4,7 @@ const ingestCSV = require("./csv.ingest");
 const ingestLocalCSV = require("./localcsv.ingest");
 
 async function runETL() {
-  console.log(" ETL started");
+  console.log(`ETL started at ${new Date().toISOString()}`);
 
   //  Ensure DB is ready
   await waitForDB();
@@ -33,10 +33,11 @@ async function runETL() {
     console.error(" Local CSV ingestion failed:", err.message);
   }
 
-  console.log(" ETL completed");
+  console.log(`ETL completed at ${new Date().toISOString()}`);
+
 }
 
-// 🔑 KEY SAFETY CHECK
+//  KEY SAFETY CHECK
 if (require.main === module) {
   runETL()
     .then(() => process.exit(0))

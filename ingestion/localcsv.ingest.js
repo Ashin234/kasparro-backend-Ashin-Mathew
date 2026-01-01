@@ -4,7 +4,7 @@ const csv = require("csv-parser");
 const { once } = require("events");
 const { pool } = require("../core/db");
 
-// 🔧 EVALUATION FIX #1
+//  EVALUATION FIX #1
 // Split schemas: identity vs observation
 const CoinSchema = require("../schemas/coin.schema");
 const PriceSchema = require("../schemas/price.schema");
@@ -12,7 +12,7 @@ const PriceSchema = require("../schemas/price.schema");
 const SOURCE = "localcsv";
 
 async function ingestLocalCSV() {
-  console.log("Running local CSV ingestion (incremental + idempotent)");
+  console.log("Running local CSV ingestion");
 
   // =========================
   // Start ETL run
@@ -81,7 +81,7 @@ async function ingestLocalCSV() {
       );
 
       // =========================
-      // 🔧 EVALUATION FIX #2
+      //  EVALUATION FIX #2
       // Validate CANONICAL coin identity
       // (Source-specific IDs are ignored)
       // =========================
@@ -91,7 +91,7 @@ async function ingestLocalCSV() {
       });
 
       // =========================
-      // 🔧 EVALUATION FIX #3
+      //  EVALUATION FIX #3
       // Upsert canonical coin
       // ONE row per real-world coin
       // =========================
@@ -109,7 +109,7 @@ async function ingestLocalCSV() {
       const canonicalCoinId = coinRes.rows[0].id;
 
       // =========================
-      // 🔧 EVALUATION FIX #4
+      //  EVALUATION FIX #4
       // Validate price observation
       // (What we saw, when, and from which source)
       // =========================
@@ -120,7 +120,7 @@ async function ingestLocalCSV() {
       });
 
       // =========================
-      // 🔧 EVALUATION FIX #5
+      //  EVALUATION FIX #5
       // Store observation linked to canonical coin
       // =========================
       await pool.query(
@@ -179,7 +179,6 @@ async function ingestLocalCSV() {
       [processedCount, durationMs, runId]
     );
 
-    console.log(" Local CSV ingestion complete (incremental + idempotent)");
   } catch (err) {
     // =========================
     // Handle failure

@@ -9,6 +9,7 @@ const PriceSchema = require("../schemas/price.schema");
 const SOURCE = "coinpaprika";
 
 async function ingestCoinPaprika() {
+  console.log(" Running CoinPaprika ingestion");
   const startTime = Date.now();
   let processedCount = 0;
 
@@ -69,7 +70,7 @@ async function ingestCoinPaprika() {
       );
 
       // =========================
-      // 🔧 EVALUATION FIX #1
+      //  EVALUATION FIX #1
       // Validate CANONICAL coin identity
       // =========================
       const coinIdentity = CoinSchema.parse({
@@ -78,7 +79,7 @@ async function ingestCoinPaprika() {
       });
 
       // =========================
-      // 🔧 EVALUATION FIX #2
+      //  EVALUATION FIX #2
       // Upsert canonical coin
       // ONE coin per symbol (BTC exists once)
       // =========================
@@ -96,7 +97,7 @@ async function ingestCoinPaprika() {
       const canonicalCoinId = coinRes.rows[0].id;
 
       // =========================
-      // 🔧 EVALUATION FIX #3
+      //  EVALUATION FIX #3
       // Validate price observation (NOT identity)
       // =========================
       const priceObservation = PriceSchema.parse({
@@ -106,7 +107,7 @@ async function ingestCoinPaprika() {
       });
 
       // =========================
-      // 🔧 EVALUATION FIX #4
+      //  EVALUATION FIX #4
       // Store observation linked to canonical coin
       // =========================
       await pool.query(
@@ -165,7 +166,6 @@ async function ingestCoinPaprika() {
       [processedCount, durationMs, runId]
     );
 
-    console.log(" CoinPaprika ingestion complete");
   } catch (err) {
     const durationMs = Date.now() - startTime;
 
